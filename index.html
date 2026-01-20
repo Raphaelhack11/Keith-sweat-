@@ -3,90 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keith Sweat Official | The King of Soul</title>
+    <title>Keith Sweat Official | Fan Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap');
         :root { --gold: #bf953f; --dark: #050505; }
-        body { font-family: 'Inter', sans-serif; background: var(--dark); color: white; scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: var(--dark); color: white; margin: 0; }
+        
+        /* THE FIX: Hide all sections by default */
+        .page-section { display: none; min-height: 100vh; width: 100%; }
+        /* Only show the section with the .active class */
+        .page-section.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .gold-text { background: linear-gradient(to right, #bf953f, #fcf6ba, #aa771c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .gold-btn { background: linear-gradient(45deg, #bf953f, #fcf6ba, #aa771c); color: black; font-weight: 800; transition: 0.3s; }
-        .gold-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(191,149,63,0.3); }
-        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .page-section { display: none; min-height: 100vh; }
-        .active { display: block; animation: fadeIn 0.8s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.4; filter: grayscale(50%); }
-        .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; width: 100%; outline: none; transition: 0.3s; }
-        .input-field:focus { border-color: var(--gold); }
+        .gold-btn { background: linear-gradient(45deg, #bf953f, #fcf6ba, #aa771c); color: black; font-weight: 800; transition: 0.3s; cursor: pointer; border: none; }
+        .gold-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+        .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; width: 100%; color: white; outline: none; }
         .modal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
+        .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.3; }
     </style>
 </head>
 <body>
 
-    <nav class="fixed w-full z-50 flex justify-between items-center px-8 py-5 bg-black/80 backdrop-blur-md border-b border-white/5">
-        <div class="text-2xl font-black gold-text tracking-tighter cursor-pointer" onclick="showPage('landing')">KEITH SWEAT</div>
-        <div class="hidden md:flex gap-10 text-[10px] font-bold tracking-[0.2em] uppercase">
-            <a href="javascript:void(0)" onclick="showPage('landing')" class="hover:text-gold transition">Home</a>
-            <a href="#about" onclick="showPage('landing')" class="hover:text-gold transition">The Story</a>
-            <a href="#tour" onclick="showPage('landing')" class="hover:text-gold transition">Tour 2026</a>
-        </div>
-        <div class="flex items-center gap-6">
-            <button onclick="showPage('login')" class="text-xs font-bold uppercase hover:text-gold">Login</button>
-            <button onclick="showPage('signup')" class="gold-btn px-6 py-2 rounded-full text-[10px] uppercase">Join Now</button>
+    <nav class="fixed w-full z-50 flex justify-between items-center px-6 py-4 bg-black/90 border-b border-white/10">
+        <div class="text-xl font-black gold-text cursor-pointer" onclick="navigateTo('landing')">KEITH SWEAT</div>
+        <div class="flex gap-4">
+            <button onclick="navigateTo('login')" class="text-xs font-bold uppercase hover:text-gold">Login</button>
+            <button onclick="navigateTo('signup')" class="gold-btn px-5 py-2 rounded-full text-[10px] uppercase">Join Club</button>
         </div>
     </nav>
 
     <section id="landing" class="page-section active">
-        <div class="relative h-screen flex items-center justify-center text-center px-6">
+        <div class="relative h-screen flex items-center justify-center text-center">
             <video autoplay muted loop playsinline class="video-bg">
                 <source src="https://assets.mixkit.co/videos/preview/mixkit-pop-singer-performing-on-stage-with-lights-4101-large.mp4" type="video/mp4">
             </video>
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-            <div class="relative z-10 space-y-6">
-                <h1 class="text-7xl md:text-[10rem] font-black gold-text leading-none italic">LOVERS TOUR</h1>
-                <p class="text-lg md:text-2xl font-light tracking-[0.5em] uppercase">2026 World Tour Experience</p>
-                <div class="flex flex-wrap gap-4 justify-center pt-8">
-                    <button onclick="window.open('https://www.youtube.com/watch?v=2m9Y_T6xHfk', '_blank')" class="gold-btn px-10 py-4 rounded-full flex items-center gap-3">
-                        <i class="fas fa-play"></i> STREAM LATEST
-                    </button>
-                    <button onclick="document.getElementById('tour-list').scrollIntoView({behavior:'smooth'})" class="border border-white/20 bg-white/5 px-10 py-4 rounded-full font-bold hover:bg-white/10 transition">
-                        VIEW TOUR DATES
-                    </button>
+            <div class="z-10 px-6">
+                <h1 class="text-6xl md:text-8xl font-black gold-text italic mb-4">MAKE IT LAST</h1>
+                <p class="text-gray-300 tracking-[0.3em] uppercase mb-8">Official 2026 Fan Experience</p>
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                    <button onclick="window.open('https://www.youtube.com/watch?v=2m9Y_T6xHfk')" class="gold-btn px-8 py-3 rounded-full">LISTEN NOW</button>
+                    <button onclick="navigateTo('signup')" class="border border-white/20 px-8 py-3 rounded-full font-bold bg-white/5">GET EXCLUSIVE ACCESS</button>
                 </div>
             </div>
         </div>
-
-        <section id="about" class="py-32 px-8 max-w-7xl mx-auto">
-            <div class="grid lg:grid-cols-2 gap-20 items-center">
-                <div class="space-y-8">
-                    <h2 class="text-5xl font-black uppercase italic">Architect of <br><span class="gold-text">New Jack Swing</span></h2>
-                    <p class="text-gray-400 text-lg leading-loose">
-                        Keith Sweat is a Harlem-born R&B legend, a pioneer of the New Jack Swing movement, and one of the most successful artists of the 90s. With hits like "Twisted" and "Nobody," he has defined the sound of romance for three decades.
-                    </p>
-                    <div class="flex gap-10">
-                        <div><div class="text-4xl font-black gold-text">25M+</div><div class="text-[10px] uppercase tracking-widest text-gray-500">Sales</div></div>
-                        <div><div class="text-4xl font-black gold-text">6X</div><div class="text-[10px] uppercase tracking-widest text-gray-500">Platinum</div></div>
-                    </div>
-                </div>
-                <div class="glass p-2 rounded-[2rem] rotate-3"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80" class="rounded-[2rem] grayscale opacity-80"></div>
-            </div>
-        </section>
-
-        <section id="tour" class="py-20 bg-white/5 px-8">
-            <div class="max-w-4xl mx-auto space-y-4" id="tour-list">
-                </div>
-        </section>
     </section>
 
-    <section id="signup" class="page-section flex items-center justify-center p-8 pt-32">
-        <div class="glass p-10 rounded-3xl w-full max-w-3xl">
-            <h2 class="text-4xl font-black mb-8 text-center gold-text uppercase">Create Fan Account</h2>
-            <form onsubmit="handleSignup(event)" class="grid md:grid-cols-2 gap-5">
+    <section id="signup" class="page-section flex items-center justify-center pt-24 pb-12 px-6">
+        <div class="glass p-8 rounded-3xl w-full max-w-2xl">
+            <h2 class="text-3xl font-black gold-text mb-6 text-center">FAN SIGNUP</h2>
+            <form onsubmit="handleSignup(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input type="text" id="regName" placeholder="Full Name" class="input-field" required>
                 <input type="number" id="regAge" placeholder="Age" class="input-field" required>
                 <select id="regSex" class="input-field" required>
@@ -98,17 +71,16 @@
                 <input type="tel" id="regPhone" placeholder="Phone Number" class="input-field" required>
                 <input type="text" id="regState" placeholder="State" class="input-field" required>
                 <input type="text" id="regCity" placeholder="City" class="input-field" required>
-                <input type="email" id="regEmail" placeholder="Email Address" class="input-field" required>
+                <input type="email" id="regEmail" placeholder="Email" class="input-field" required>
                 <input type="password" id="regPass" placeholder="Password" class="input-field md:col-span-2" required>
                 <button type="submit" class="gold-btn md:col-span-2 py-4 rounded-xl mt-4">CREATE ACCOUNT</button>
             </form>
-            <p class="text-center mt-6 text-gray-500">Already a member? <a href="javascript:void(0)" onclick="showPage('login')" class="text-gold underline">Login</a></p>
         </div>
     </section>
 
-    <section id="login" class="page-section flex items-center justify-center p-8">
-        <div class="glass p-12 rounded-3xl w-full max-w-md">
-            <h2 class="text-3xl font-black mb-8 text-center gold-text uppercase">Fan Login</h2>
+    <section id="login" class="page-section flex items-center justify-center px-6">
+        <div class="glass p-8 rounded-3xl w-full max-w-md">
+            <h2 class="text-3xl font-black gold-text mb-6 text-center">WELCOME BACK</h2>
             <form onsubmit="handleLogin(event)" class="space-y-4">
                 <input type="email" id="logEmail" placeholder="Email" class="input-field" required>
                 <input type="password" id="logPass" placeholder="Password" class="input-field" required>
@@ -117,140 +89,104 @@
         </div>
     </section>
 
-    <section id="dashboard" class="page-section pt-32 px-8 pb-20 max-w-7xl mx-auto">
-        <div class="grid lg:grid-cols-3 gap-10">
+    <section id="dashboard" class="page-section pt-24 px-6 pb-20 max-w-6xl mx-auto">
+        <div class="grid lg:grid-cols-3 gap-8">
             <div class="space-y-6">
                 <div class="glass p-8 rounded-3xl border-gold/30">
-                    <div class="flex justify-between mb-12"><span class="text-[10px] font-bold tracking-widest text-gold uppercase">Platinum Card</span><i class="fas fa-microchip text-gold"></i></div>
-                    <div class="text-sm opacity-50 font-mono">OFFICIAL FAN NAME</div>
-                    <div id="dispName" class="text-2xl font-black uppercase mb-8">User Name</div>
-                    <div class="flex justify-between items-end"><div class="text-xs">ID: KS-2026-X</div><img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" class="w-12 h-12 invert"></div>
+                    <div class="text-[10px] text-gold font-bold mb-4 tracking-widest uppercase">Official Member</div>
+                    <div id="dispName" class="text-2xl font-black uppercase mb-6">User Name</div>
+                    <div class="text-xs opacity-50 font-mono">ID: KS-2026-ACTIVE</div>
                 </div>
                 <div class="glass p-6 rounded-3xl">
-                    <h4 class="font-bold mb-4 uppercase text-sm tracking-widest text-gold">Exclusive Access</h4>
-                    <button onclick="openModal('vip')" class="gold-btn w-full py-3 rounded-xl text-xs">BOOK MEET & GREET ($350)</button>
-                </div>
-                <div class="glass p-6 rounded-3xl">
-                    <h4 class="font-bold mb-4 uppercase text-sm tracking-widest">My Fan Gallery</h4>
-                    <input type="file" id="photoInput" class="hidden" accept="image/*" onchange="uploadPhoto(event)">
-                    <button onclick="document.getElementById('photoInput').click()" class="w-full bg-white/10 py-3 rounded-xl text-xs hover:bg-white/20 transition mb-4">UPLOAD PHOTO</button>
-                    <div id="galleryGrid" class="grid grid-cols-3 gap-2">
-                        </div>
+                    <h3 class="font-bold text-sm mb-4 gold-text">MESSAGE KEITH (DIRECT)</h3>
+                    <div id="chatBox" class="h-40 overflow-y-auto text-xs space-y-2 mb-4 pr-2">
+                        <div class="bg-white/10 p-2 rounded"><strong>System:</strong> Connection established. Keith is online.</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="chatInput" placeholder="Type a message..." class="input-field text-xs">
+                        <button onclick="sendMessage()" class="gold-btn px-4 rounded-lg"><i class="fas fa-paper-plane"></i></button>
+                    </div>
                 </div>
             </div>
-
-            <div class="lg:col-span-2 space-y-8">
+            
+            <div class="lg:col-span-2 space-y-6">
                 <div class="glass rounded-3xl overflow-hidden">
-                    <div class="aspect-video bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/2m9Y_T6xHfk" frameborder="0" allowfullscreen></iframe></div>
-                    <div class="p-6"><h3 class="text-2xl font-black">Now Playing: "Nobody" (Official Music Video)</h3><p class="text-gray-500 mt-2 italic">A classic for the fans.</p></div>
+                    <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/2m9Y_T6xHfk" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <div class="space-y-4">
-                    <h3 class="text-xl font-bold uppercase tracking-widest">Available Tickets</h3>
-                    <div id="dash-tour-list" class="space-y-3"></div>
+                <div class="glass p-6 rounded-3xl">
+                    <h3 class="font-bold mb-4 uppercase text-xs tracking-widest">Upcoming Tours</h3>
+                    <div id="tourList" class="space-y-3"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div id="ticketModal" class="modal"><div class="glass p-10 rounded-3xl w-full max-w-md">
-        <h3 class="text-2xl font-black mb-2">RESERVE <span class="gold-text">TICKETS</span></h3>
-        <p id="modalVenue" class="text-gray-400 text-sm mb-6"></p>
-        <div class="space-y-4">
-            <input type="number" placeholder="Quantity" class="input-field" min="1" value="1">
-            <select class="input-field"><option>VIP Seating</option><option>General Admission</option></select>
-            <button onclick="closeModal()" class="gold-btn w-full py-4 rounded-xl">CHECKOUT</button>
-        </div>
-    </div></div>
-
-    <div id="vipModal" class="modal"><div class="glass p-10 rounded-3xl w-full max-w-md">
-        <h3 class="text-2xl font-black mb-6">VIP <span class="gold-text">MEET & GREET</span></h3>
-        <p class="text-sm text-gray-400 mb-6">Request a 10-minute session with Keith Sweat backstage.</p>
-        <textarea placeholder="Tell Keith why you are his biggest fan..." class="input-field h-32 mb-4"></textarea>
-        <button onclick="closeModal()" class="gold-btn w-full py-4 rounded-xl">SEND REQUEST</button>
-    </div></div>
+    <footer class="py-12 border-t border-white/5 text-center text-[10px] text-gray-600 uppercase tracking-widest">
+        &copy; 2026 Keith Sweat Official. All Rights Reserved.
+    </footer>
 
     <script>
-        const countries = ["USA", "UK", "Canada", "France", "Germany", "Japan", "Brazil", "South Africa", "Ghana", "Australia", "UAE", "Saudi Arabia", "Kenya"]; // Shortened for sample
-        const tourData = [
-            { date: "JAN 31", venue: "Mystic Lake Casino", city: "Prior Lake, MN", price: "$90" },
-            { date: "FEB 14", venue: "Boardwalk Hall", city: "Atlantic City, NJ", price: "$115" },
-            { date: "MAR 14", venue: "Peacock Theater", city: "Los Angeles, CA", price: "$99" }
-        ];
-
-        window.onload = () => {
-            const countryEl = document.getElementById('regCountry');
-            countries.forEach(c => countryEl.innerHTML += `<option>${c}</option>`);
-            renderTours();
-            loadGallery();
-        };
-
-        function showPage(id) {
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        // PAGE NAVIGATION LOGIC
+        function navigateTo(id) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             window.scrollTo(0,0);
         }
 
+        // COUNTRY LIST (No Nigeria)
+        const countryList = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Australia", "Austria", "Bahamas", "Belgium", "Brazil", "Canada", "China", "Denmark", "Egypt", "France", "Germany", "Ghana", "India", "Italy", "Jamaica", "Japan", "Kenya", "Mexico", "Netherlands", "Norway", "Portugal", "Russia", "South Africa", "Spain", "Sweden", "Switzerland", "UAE", "UK", "USA"];
+        
+        window.onload = () => {
+            const select = document.getElementById('regCountry');
+            countryList.sort().forEach(c => select.innerHTML += `<option>${c}</option>`);
+            renderTours();
+        };
+
+        const tours = [
+            { v: "Mystic Lake Casino", d: "JAN 31", c: "Prior Lake, MN", p: "$90" },
+            { v: "Boardwalk Hall", d: "FEB 14", c: "Atlantic City, NJ", p: "$115" },
+            { v: "Peacock Theater", d: "MAR 14", c: "Los Angeles, CA", p: "$99" }
+        ];
+
         function renderTours() {
-            const lists = [document.getElementById('tour-list'), document.getElementById('dash-tour-list')];
-            lists.forEach(l => {
-                l.innerHTML = tourData.map(t => `
-                    <div class="glass p-6 rounded-2xl flex justify-between items-center border-l-4 border-gold">
-                        <div><div class="font-bold text-lg">${t.venue}</div><div class="text-xs text-gray-500 uppercase">${t.date} • ${t.city}</div></div>
-                        <div class="flex items-center gap-4"><span class="gold-text font-black">${t.price}</span>
-                        <button onclick="openModal('ticket', '${t.venue}')" class="bg-white text-black px-5 py-2 rounded-lg text-xs font-bold">GET TICKETS</button></div>
-                    </div>
-                `).join('');
-            });
+            document.getElementById('tourList').innerHTML = tours.map(t => `
+                <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/5">
+                    <div><div class="font-bold text-sm">${t.v}</div><div class="text-[10px] opacity-50">${t.d} • ${t.c}</div></div>
+                    <button class="gold-btn px-4 py-2 rounded-lg text-[10px]">BUY ${t.p}</button>
+                </div>
+            `).join('');
         }
 
         function handleSignup(e) {
             e.preventDefault();
-            const data = { name: document.getElementById('regName').value, email: document.getElementById('regEmail').value, pass: document.getElementById('regPass').value };
-            localStorage.setItem('sweatUser', JSON.stringify(data));
-            Toastify({ text: "Signup Successful!", backgroundColor: "gold" }).showToast();
-            setTimeout(() => showPage('login'), 1500);
+            const user = { name: document.getElementById('regName').value, email: document.getElementById('regEmail').value, pass: document.getElementById('regPass').value };
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            Toastify({ text: "Signup Successful! Redirecting...", backgroundColor: "gold" }).showToast();
+            setTimeout(() => navigateTo('login'), 2000);
         }
 
         function handleLogin(e) {
             e.preventDefault();
-            const stored = JSON.parse(localStorage.getItem('sweatUser'));
+            const stored = JSON.parse(localStorage.getItem('currentUser'));
             if(stored && stored.email === document.getElementById('logEmail').value && stored.pass === document.getElementById('logPass').value) {
                 document.getElementById('dispName').innerText = stored.name;
-                Toastify({ text: "Welcome back!", backgroundColor: "green" }).showToast();
-                setTimeout(() => showPage('dashboard'), 1000);
+                Toastify({ text: "Welcome back, " + stored.name + "!", backgroundColor: "green" }).showToast();
+                setTimeout(() => navigateTo('dashboard'), 1000);
             } else {
-                Toastify({ text: "Error: Invalid credentials", backgroundColor: "red" }).showToast();
+                Toastify({ text: "Error: Account not found", backgroundColor: "red" }).showToast();
             }
         }
 
-        function openModal(type, info = "") {
-            if(type === 'ticket') { document.getElementById('modalVenue').innerText = info; document.getElementById('ticketModal').classList.add('active'); }
-            else { document.getElementById('vipModal').classList.add('active'); }
-        }
-
-        function closeModal() {
-            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
-            Toastify({ text: "Success! Confirmation sent to your email.", backgroundColor: "green" }).showToast();
-        }
-
-        // PHOTO GALLERY LOGIC
-        function uploadPhoto(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const gallery = JSON.parse(localStorage.getItem('fanGallery') || "[]");
-                gallery.push(e.target.result);
-                localStorage.setItem('fanGallery', JSON.stringify(gallery));
-                loadGallery();
-                Toastify({ text: "Photo added to your gallery!", backgroundColor: "gold" }).showToast();
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function loadGallery() {
-            const gallery = JSON.parse(localStorage.getItem('fanGallery') || "[]");
-            const grid = document.getElementById('galleryGrid');
-            grid.innerHTML = gallery.map(img => `<img src="${img}" class="w-full h-16 object-cover rounded-lg border border-white/10">`).join('');
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            if(!input.value) return;
+            const box = document.getElementById('chatBox');
+            box.innerHTML += `<div class="text-right"><span class="bg-gold text-black p-1 rounded px-2">You: ${input.value}</span></div>`;
+            input.value = "";
+            setTimeout(() => {
+                box.innerHTML += `<div class="text-left"><span class="bg-white/10 p-1 rounded px-2"><strong>Keith:</strong> Thanks for the love! See you at the show.</span></div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 1000);
         }
     </script>
 </body>

@@ -453,9 +453,8 @@
                 document.getElementById('nav-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 document.getElementById('card-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 
-                // Swapping Vevo ID for an official, embeddable high-quality version
-                // This version of "Nobody" does not have the "Video Unavailable" block
-                document.getElementById('vault-video').src = `https://www.youtube.com/embed/P_P5F-yvR0Q?autoplay=1&rel=0`;
+                // RESTORED: This is the high-quality performance link that works in previews
+                document.getElementById('vault-video').src = "https://www.youtube.com/embed/S2pX9yD7H3I?autoplay=1&rel=0";
                 
                 populateDashboardTickets();
                 closeModals();
@@ -465,12 +464,7 @@
 
         function handleLogout() {
             currentUser = null;
-            document.getElementById('landing-page-container').classList.remove('hidden-section');
-            document.getElementById('dashboard').classList.add('hidden-section');
-            document.getElementById('auth-nav').classList.remove('hidden-section');
-            document.getElementById('user-nav').classList.add('hidden-section');
-            document.getElementById('vault-video').src = "";
-            toast("✓ LOGGED OUT");
+            location.reload();
         }
 
         function populateLandingEvents() {
@@ -517,7 +511,7 @@
                         <b class="text-[10px] gold-text uppercase">${t.n}</b>
                         <p class="text-[9px] text-gray-500 line-clamp-1">${t.d}</p>
                     </div>
-                    <button onclick="showDetails('${t.n}', ${t.p}, 'Tier', '${t.d}', 'Exclusive upgrade for top tier SWEAThearts. Includes professional photos and limited edition merch.')" class="text-[9px] border border-gold text-gold px-3 py-1.5 rounded-full uppercase hover:bg-gold hover:text-black transition">Upgrade</button>
+                    <button onclick="showDetails('${t.n}', ${t.p}, 'Tier', '${t.d}', 'Exclusive upgrade for top tier SWEAThearts.')" class="text-[9px] border border-gold text-gold px-3 py-1.5 rounded-full uppercase hover:bg-gold hover:text-black transition">Upgrade</button>
                 </div>`).join('');
             lucide.createIcons();
         }
@@ -529,14 +523,6 @@
             document.getElementById('det-title').innerText = title;
             document.getElementById('det-venue').innerText = venue;
             document.getElementById('det-desc').innerText = info;
-            
-            const perks = document.getElementById('vip-perks');
-            if(title.toLowerCase().includes('meet') || title.toLowerCase().includes('diamond')) {
-                perks.classList.remove('hidden-section');
-            } else {
-                perks.classList.add('hidden-section');
-            }
-
             updateQty(0);
         }
 
@@ -557,7 +543,6 @@
             showStage('address');
             document.getElementById('wallet-addr').innerText = a;
             document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${a}`;
-            lucide.createIcons();
         }
 
         function copyAddr() {

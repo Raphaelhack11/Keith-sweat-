@@ -3,236 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keith Sweat | Official Fan Experience</title>
+    <title>Keith Sweat Official | The King of Soul</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;800&display=swap');
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
-            color: #ffffff;
-            scroll-behavior: smooth;
-        }
-
-        .gold-text {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .gold-bg {
-            background: linear-gradient(45deg, #bf953f, #fcf6ba, #aa771c);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.5rem;
-        }
-
-        .membership-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            border: 1px solid #bf953f;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .membership-card::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(191,149,63,0.1) 0%, transparent 70%);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap');
+        :root { --gold: #bf953f; --dark: #050505; }
+        body { font-family: 'Inter', sans-serif; background: var(--dark); color: white; scroll-behavior: smooth; }
+        .gold-text { background: linear-gradient(to right, #bf953f, #fcf6ba, #aa771c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gold-btn { background: linear-gradient(45deg, #bf953f, #fcf6ba, #aa771c); color: black; font-weight: 800; transition: 0.3s; }
+        .gold-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(191,149,63,0.3); }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .page-section { display: none; min-height: 100vh; }
+        .active { display: block; animation: fadeIn 0.8s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .video-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.4; filter: grayscale(50%); }
+        .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; width: 100%; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--gold); }
+        .modal { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
     </style>
 </head>
 <body>
 
-    <nav class="fixed w-full z-50 px-6 py-4 flex justify-between items-center bg-black/80 backdrop-blur-md border-b border-white/10">
-        <div class="text-2xl font-black tracking-tighter gold-text">KEITH SWEAT</div>
-        <div class="space-x-8 hidden md:flex text-sm font-semibold uppercase tracking-widest">
-            <a href="#" onclick="showTab('landing')" class="hover:text-[#bf953f] transition">Home</a>
-            <a href="#events" class="hover:text-[#bf953f] transition">Tour</a>
-            <a href="#" onclick="showTab('dashboard')" class="hover:text-[#bf953f] transition">Fan Dashboard</a>
+    <nav class="fixed w-full z-50 flex justify-between items-center px-8 py-5 bg-black/80 backdrop-blur-md border-b border-white/5">
+        <div class="text-2xl font-black gold-text tracking-tighter cursor-pointer" onclick="showPage('landing')">KEITH SWEAT</div>
+        <div class="hidden md:flex gap-10 text-[10px] font-bold tracking-[0.2em] uppercase">
+            <a href="javascript:void(0)" onclick="showPage('landing')" class="hover:text-gold transition">Home</a>
+            <a href="#about" onclick="showPage('landing')" class="hover:text-gold transition">The Story</a>
+            <a href="#tour" onclick="showPage('landing')" class="hover:text-gold transition">Tour 2026</a>
         </div>
-        <div>
-            <button onclick="showTab('dashboard')" class="gold-bg text-black px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition">LOGIN / JOIN</button>
+        <div class="flex items-center gap-6">
+            <button onclick="showPage('login')" class="text-xs font-bold uppercase hover:text-gold">Login</button>
+            <button onclick="showPage('signup')" class="gold-btn px-6 py-2 rounded-full text-[10px] uppercase">Join Now</button>
         </div>
     </nav>
 
-    <div id="landing" class="tab-content active">
-        <section class="relative h-screen flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1514525253361-bee8718a340b?auto=format&fit=crop&q=80" class="w-full h-full object-cover opacity-40 scale-110">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
-            </div>
-            
-            <div class="relative z-10 text-center px-4">
-                <h1 class="text-6xl md:text-8xl font-black mb-4 tracking-tighter">THE <span class="gold-text">SWEAT</span> LEGACY</h1>
-                <p class="text-xl md:text-2xl font-light text-gray-300 max-w-2xl mx-auto mb-8">Official Music. Global Tours. Exclusive Fan Access.</p>
-                <div class="flex flex-col md:flex-row gap-4 justify-center">
-                    <button class="gold-bg text-black px-10 py-4 rounded-full font-extrabold flex items-center justify-center gap-2">
-                        <i class="fas fa-play"></i> LISTEN NOW
+    <section id="landing" class="page-section active">
+        <div class="relative h-screen flex items-center justify-center text-center px-6">
+            <video autoplay muted loop playsinline class="video-bg">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-pop-singer-performing-on-stage-with-lights-4101-large.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+            <div class="relative z-10 space-y-6">
+                <h1 class="text-7xl md:text-[10rem] font-black gold-text leading-none italic">LOVERS TOUR</h1>
+                <p class="text-lg md:text-2xl font-light tracking-[0.5em] uppercase">2026 World Tour Experience</p>
+                <div class="flex flex-wrap gap-4 justify-center pt-8">
+                    <button onclick="window.open('https://www.youtube.com/watch?v=2m9Y_T6xHfk', '_blank')" class="gold-btn px-10 py-4 rounded-full flex items-center gap-3">
+                        <i class="fas fa-play"></i> STREAM LATEST
                     </button>
-                    <button class="border border-white/20 bg-white/5 backdrop-blur-md px-10 py-4 rounded-full font-extrabold hover:bg-white/10 transition">
+                    <button onclick="document.getElementById('tour-list').scrollIntoView({behavior:'smooth'})" class="border border-white/20 bg-white/5 px-10 py-4 rounded-full font-bold hover:bg-white/10 transition">
                         VIEW TOUR DATES
                     </button>
                 </div>
             </div>
+        </div>
+
+        <section id="about" class="py-32 px-8 max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-20 items-center">
+                <div class="space-y-8">
+                    <h2 class="text-5xl font-black uppercase italic">Architect of <br><span class="gold-text">New Jack Swing</span></h2>
+                    <p class="text-gray-400 text-lg leading-loose">
+                        Keith Sweat is a Harlem-born R&B legend, a pioneer of the New Jack Swing movement, and one of the most successful artists of the 90s. With hits like "Twisted" and "Nobody," he has defined the sound of romance for three decades.
+                    </p>
+                    <div class="flex gap-10">
+                        <div><div class="text-4xl font-black gold-text">25M+</div><div class="text-[10px] uppercase tracking-widest text-gray-500">Sales</div></div>
+                        <div><div class="text-4xl font-black gold-text">6X</div><div class="text-[10px] uppercase tracking-widest text-gray-500">Platinum</div></div>
+                    </div>
+                </div>
+                <div class="glass p-2 rounded-[2rem] rotate-3"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80" class="rounded-[2rem] grayscale opacity-80"></div>
+            </div>
         </section>
 
-        <section class="py-20 px-6 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="glass-card p-10 text-center">
-                <div class="text-5xl font-black gold-text mb-2">30+</div>
-                <div class="text-gray-400 uppercase tracking-widest text-sm">Years of R&B Excellence</div>
-            </div>
-            <div class="glass-card p-10 text-center border-[#bf953f]/30">
-                <div class="text-5xl font-black gold-text mb-2">15+</div>
-                <div class="text-gray-400 uppercase tracking-widest text-sm">Studio Albums</div>
-            </div>
-            <div class="glass-card p-10 text-center">
-                <div class="text-5xl font-black gold-text mb-2">6X</div>
-                <div class="text-gray-400 uppercase tracking-widest text-sm">Platinum Certified</div>
-            </div>
+        <section id="tour" class="py-20 bg-white/5 px-8">
+            <div class="max-w-4xl mx-auto space-y-4" id="tour-list">
+                </div>
         </section>
-    </div>
+    </section>
 
-    <div id="dashboard" class="tab-content pt-24 px-6 pb-20 max-w-7xl mx-auto">
-        <div class="flex flex-col md:flex-row gap-8">
-            
-            <div class="w-full md:w-1/3 space-y-6">
-                <div class="membership-card p-8 rounded-3xl shadow-2xl">
-                    <div class="flex justify-between items-start mb-12">
-                        <div class="text-xs tracking-widest text-gray-400 uppercase font-bold">Official Fan Pass</div>
-                        <i class="fas fa-wifi text-[#bf953f] rotate-90"></i>
-                    </div>
-                    <div class="mb-8">
-                        <div class="text-2xl font-bold tracking-tight">KEITH SWEAT</div>
-                        <div class="text-sm text-[#bf953f] font-mono">ID: KS-90210-2024</div>
-                    </div>
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <div class="text-[10px] uppercase text-gray-500">Member Name</div>
-                            <div class="font-semibold">KING SUAVE</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-[10px] uppercase text-gray-500">Level</div>
-                            <div class="text-[#bf953f] font-bold">PLATINUM</div>
-                        </div>
-                    </div>
+    <section id="signup" class="page-section flex items-center justify-center p-8 pt-32">
+        <div class="glass p-10 rounded-3xl w-full max-w-3xl">
+            <h2 class="text-4xl font-black mb-8 text-center gold-text uppercase">Create Fan Account</h2>
+            <form onsubmit="handleSignup(event)" class="grid md:grid-cols-2 gap-5">
+                <input type="text" id="regName" placeholder="Full Name" class="input-field" required>
+                <input type="number" id="regAge" placeholder="Age" class="input-field" required>
+                <select id="regSex" class="input-field" required>
+                    <option value="">Select Sex</option><option>Male</option><option>Female</option>
+                </select>
+                <select id="regCountry" class="input-field" required>
+                    <option value="">Select Country</option>
+                </select>
+                <input type="tel" id="regPhone" placeholder="Phone Number" class="input-field" required>
+                <input type="text" id="regState" placeholder="State" class="input-field" required>
+                <input type="text" id="regCity" placeholder="City" class="input-field" required>
+                <input type="email" id="regEmail" placeholder="Email Address" class="input-field" required>
+                <input type="password" id="regPass" placeholder="Password" class="input-field md:col-span-2" required>
+                <button type="submit" class="gold-btn md:col-span-2 py-4 rounded-xl mt-4">CREATE ACCOUNT</button>
+            </form>
+            <p class="text-center mt-6 text-gray-500">Already a member? <a href="javascript:void(0)" onclick="showPage('login')" class="text-gold underline">Login</a></p>
+        </div>
+    </section>
+
+    <section id="login" class="page-section flex items-center justify-center p-8">
+        <div class="glass p-12 rounded-3xl w-full max-w-md">
+            <h2 class="text-3xl font-black mb-8 text-center gold-text uppercase">Fan Login</h2>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <input type="email" id="logEmail" placeholder="Email" class="input-field" required>
+                <input type="password" id="logPass" placeholder="Password" class="input-field" required>
+                <button type="submit" class="gold-btn w-full py-4 rounded-xl mt-4">LOGIN</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="dashboard" class="page-section pt-32 px-8 pb-20 max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-3 gap-10">
+            <div class="space-y-6">
+                <div class="glass p-8 rounded-3xl border-gold/30">
+                    <div class="flex justify-between mb-12"><span class="text-[10px] font-bold tracking-widest text-gold uppercase">Platinum Card</span><i class="fas fa-microchip text-gold"></i></div>
+                    <div class="text-sm opacity-50 font-mono">OFFICIAL FAN NAME</div>
+                    <div id="dispName" class="text-2xl font-black uppercase mb-8">User Name</div>
+                    <div class="flex justify-between items-end"><div class="text-xs">ID: KS-2026-X</div><img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" class="w-12 h-12 invert"></div>
                 </div>
-
-                <div class="glass-card p-6">
-                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <i class="fas fa-star gold-text"></i> VIP Experience
-                    </h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5">
-                            <span>Meet & Greet</span>
-                            <span class="font-bold gold-text">$250.00</span>
+                <div class="glass p-6 rounded-3xl">
+                    <h4 class="font-bold mb-4 uppercase text-sm tracking-widest text-gold">Exclusive Access</h4>
+                    <button onclick="openModal('vip')" class="gold-btn w-full py-3 rounded-xl text-xs">BOOK MEET & GREET ($350)</button>
+                </div>
+                <div class="glass p-6 rounded-3xl">
+                    <h4 class="font-bold mb-4 uppercase text-sm tracking-widest">My Fan Gallery</h4>
+                    <input type="file" id="photoInput" class="hidden" accept="image/*" onchange="uploadPhoto(event)">
+                    <button onclick="document.getElementById('photoInput').click()" class="w-full bg-white/10 py-3 rounded-xl text-xs hover:bg-white/20 transition mb-4">UPLOAD PHOTO</button>
+                    <div id="galleryGrid" class="grid grid-cols-3 gap-2">
                         </div>
-                        <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5">
-                            <span>Backstage Pass</span>
-                            <span class="font-bold gold-text">$500.00</span>
-                        </div>
-                        <button class="w-full gold-bg text-black font-bold py-3 rounded-xl mt-2 hover:opacity-90 transition">
-                            REQUEST APPOINTMENT
-                        </button>
-                    </div>
                 </div>
             </div>
 
-            <div class="w-full md:w-2/3 space-y-8">
-                <div class="glass-card overflow-hidden">
-                    <div class="p-4 border-b border-white/10 flex justify-between items-center">
-                        <span class="text-sm font-bold uppercase tracking-widest text-gray-400">Exclusive Video Vault</span>
-                        <span class="text-xs bg-red-600 px-2 py-1 rounded">LIVE NOW</span>
-                    </div>
-                    <div class="aspect-video bg-black relative">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/2m9Y_T6xHfk" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div class="p-6">
-                        <h2 class="text-2xl font-bold mb-2">Keith Sweat - "Nobody" (Official Live Performance)</h2>
-                        <p class="text-gray-400 text-sm">Exclusive 4K remaster for official fan club members.</p>
-                    </div>
+            <div class="lg:col-span-2 space-y-8">
+                <div class="glass rounded-3xl overflow-hidden">
+                    <div class="aspect-video bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/2m9Y_T6xHfk" frameborder="0" allowfullscreen></iframe></div>
+                    <div class="p-6"><h3 class="text-2xl font-black">Now Playing: "Nobody" (Official Music Video)</h3><p class="text-gray-500 mt-2 italic">A classic for the fans.</p></div>
                 </div>
-
-                <div id="events" class="space-y-4">
-                    <h3 class="text-2xl font-bold">Upcoming Tour Dates</h3>
-                    
-                    <div class="glass-card p-5 flex items-center justify-between hover:bg-white/5 transition border-l-4 border-l-[#bf953f]">
-                        <div class="flex items-center gap-6">
-                            <div class="text-center">
-                                <div class="text-sm uppercase text-gray-400 font-bold">JAN</div>
-                                <div class="text-2xl font-black">20</div>
-                            </div>
-                            <div>
-                                <div class="font-bold text-lg">Apollo Theater</div>
-                                <div class="text-sm text-gray-400">New York, NY</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-6">
-                            <div class="text-right hidden sm:block">
-                                <div class="text-xs text-gray-500 uppercase">Starting at</div>
-                                <div class="font-bold gold-text">$85.00</div>
-                            </div>
-                            <button class="bg-white text-black px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition">BUY TICKETS</button>
-                        </div>
-                    </div>
-
-                    <div class="glass-card p-5 flex items-center justify-between hover:bg-white/5 transition">
-                        <div class="flex items-center gap-6">
-                            <div class="text-center">
-                                <div class="text-sm uppercase text-gray-400 font-bold">FEB</div>
-                                <div class="text-2xl font-black">14</div>
-                            </div>
-                            <div>
-                                <div class="font-bold text-lg">Microsoft Theater</div>
-                                <div class="text-sm text-gray-400">Los Angeles, CA</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-6">
-                            <div class="text-right hidden sm:block">
-                                <div class="text-xs text-gray-500 uppercase">Starting at</div>
-                                <div class="font-bold gold-text">$120.00</div>
-                            </div>
-                            <button class="bg-white text-black px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition">BUY TICKETS</button>
-                        </div>
-                    </div>
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold uppercase tracking-widest">Available Tickets</h3>
+                    <div id="dash-tour-list" class="space-y-3"></div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <footer class="py-20 border-t border-white/10 mt-20 text-center">
-        <div class="text-3xl font-black gold-text mb-8 tracking-tighter">KEITH SWEAT</div>
-        <div class="flex justify-center gap-8 mb-10 text-2xl text-gray-400">
-            <i class="fab fa-instagram hover:text-[#bf953f] cursor-pointer"></i>
-            <i class="fab fa-facebook hover:text-[#bf953f] cursor-pointer"></i>
-            <i class="fab fa-twitter hover:text-[#bf953f] cursor-pointer"></i>
-            <i class="fab fa-youtube hover:text-[#bf953f] cursor-pointer"></i>
+    <div id="ticketModal" class="modal"><div class="glass p-10 rounded-3xl w-full max-w-md">
+        <h3 class="text-2xl font-black mb-2">RESERVE <span class="gold-text">TICKETS</span></h3>
+        <p id="modalVenue" class="text-gray-400 text-sm mb-6"></p>
+        <div class="space-y-4">
+            <input type="number" placeholder="Quantity" class="input-field" min="1" value="1">
+            <select class="input-field"><option>VIP Seating</option><option>General Admission</option></select>
+            <button onclick="closeModal()" class="gold-btn w-full py-4 rounded-xl">CHECKOUT</button>
         </div>
-        <p class="text-xs text-gray-600 uppercase tracking-widest">&copy; 2026 Keith Sweat Music Group. All Rights Reserved.</p>
-    </footer>
+    </div></div>
+
+    <div id="vipModal" class="modal"><div class="glass p-10 rounded-3xl w-full max-w-md">
+        <h3 class="text-2xl font-black mb-6">VIP <span class="gold-text">MEET & GREET</span></h3>
+        <p class="text-sm text-gray-400 mb-6">Request a 10-minute session with Keith Sweat backstage.</p>
+        <textarea placeholder="Tell Keith why you are his biggest fan..." class="input-field h-32 mb-4"></textarea>
+        <button onclick="closeModal()" class="gold-btn w-full py-4 rounded-xl">SEND REQUEST</button>
+    </div></div>
 
     <script>
-        function showTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
+        const countries = ["USA", "UK", "Canada", "France", "Germany", "Japan", "Brazil", "South Africa", "Ghana", "Australia", "UAE", "Saudi Arabia", "Kenya"]; // Shortened for sample
+        const tourData = [
+            { date: "JAN 31", venue: "Mystic Lake Casino", city: "Prior Lake, MN", price: "$90" },
+            { date: "FEB 14", venue: "Boardwalk Hall", city: "Atlantic City, NJ", price: "$115" },
+            { date: "MAR 14", venue: "Peacock Theater", city: "Los Angeles, CA", price: "$99" }
+        ];
+
+        window.onload = () => {
+            const countryEl = document.getElementById('regCountry');
+            countries.forEach(c => countryEl.innerHTML += `<option>${c}</option>`);
+            renderTours();
+            loadGallery();
+        };
+
+        function showPage(id) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function renderTours() {
+            const lists = [document.getElementById('tour-list'), document.getElementById('dash-tour-list')];
+            lists.forEach(l => {
+                l.innerHTML = tourData.map(t => `
+                    <div class="glass p-6 rounded-2xl flex justify-between items-center border-l-4 border-gold">
+                        <div><div class="font-bold text-lg">${t.venue}</div><div class="text-xs text-gray-500 uppercase">${t.date} • ${t.city}</div></div>
+                        <div class="flex items-center gap-4"><span class="gold-text font-black">${t.price}</span>
+                        <button onclick="openModal('ticket', '${t.venue}')" class="bg-white text-black px-5 py-2 rounded-lg text-xs font-bold">GET TICKETS</button></div>
+                    </div>
+                `).join('');
             });
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            // Scroll to top
-            window.scrollTo(0, 0);
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const data = { name: document.getElementById('regName').value, email: document.getElementById('regEmail').value, pass: document.getElementById('regPass').value };
+            localStorage.setItem('sweatUser', JSON.stringify(data));
+            Toastify({ text: "Signup Successful!", backgroundColor: "gold" }).showToast();
+            setTimeout(() => showPage('login'), 1500);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const stored = JSON.parse(localStorage.getItem('sweatUser'));
+            if(stored && stored.email === document.getElementById('logEmail').value && stored.pass === document.getElementById('logPass').value) {
+                document.getElementById('dispName').innerText = stored.name;
+                Toastify({ text: "Welcome back!", backgroundColor: "green" }).showToast();
+                setTimeout(() => showPage('dashboard'), 1000);
+            } else {
+                Toastify({ text: "Error: Invalid credentials", backgroundColor: "red" }).showToast();
+            }
+        }
+
+        function openModal(type, info = "") {
+            if(type === 'ticket') { document.getElementById('modalVenue').innerText = info; document.getElementById('ticketModal').classList.add('active'); }
+            else { document.getElementById('vipModal').classList.add('active'); }
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+            Toastify({ text: "Success! Confirmation sent to your email.", backgroundColor: "green" }).showToast();
+        }
+
+        // PHOTO GALLERY LOGIC
+        function uploadPhoto(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const gallery = JSON.parse(localStorage.getItem('fanGallery') || "[]");
+                gallery.push(e.target.result);
+                localStorage.setItem('fanGallery', JSON.stringify(gallery));
+                loadGallery();
+                Toastify({ text: "Photo added to your gallery!", backgroundColor: "gold" }).showToast();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function loadGallery() {
+            const gallery = JSON.parse(localStorage.getItem('fanGallery') || "[]");
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = gallery.map(img => `<img src="${img}" class="w-full h-16 object-cover rounded-lg border border-white/10">`).join('');
         }
     </script>
 </body>

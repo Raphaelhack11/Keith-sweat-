@@ -28,8 +28,7 @@
         .hero-title { font-family: 'Playfair Display', serif; }
         .hidden-section { display: none !important; }
         
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 24px; border: 1px solid rgba(191,149,63,0.3); background: #000; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .vault-container { position: relative; border-radius: 24px; border: 1px solid rgba(191,149,63,0.3); background: #000; overflow: hidden; }
 
         input, select, textarea { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; outline: none; }
         input:focus { border-color: var(--gold) !important; }
@@ -39,9 +38,14 @@
         .animate-fade { animation: fade-up 1s ease forwards; }
         
         .itinerary-card:hover { border-color: rgba(191,149,63,0.5); background: rgba(191,149,63,0.03); }
+
+        #verify-code-input { -webkit-text-fill-color: #bf953f !important; color: #bf953f !important; }
     </style>
 </head>
 <body>
+
+    <!-- FIXED AUDIO SOURCE: Using a stable direct MP3 link for R&B vibe -->
+    <audio id="vault-audio-element" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" crossorigin="anonymous"></audio>
 
     <!-- PERSISTENT NAVIGATION -->
     <nav class="fixed w-full z-[100] px-6 py-5 flex justify-between items-center glass bg-black/80 border-b border-gold/10">
@@ -187,25 +191,47 @@
         <div class="grid lg:grid-cols-12 gap-10">
             <!-- MAIN CONTENT -->
             <div class="lg:col-span-8 space-y-10">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-col gap-2">
                     <h2 class="text-3xl font-black uppercase tracking-tight">The Vault / <span id="welcome-name" class="gold-text"></span></h2>
-                    <div class="flex gap-2 items-center text-[10px] gold-text font-black uppercase tracking-widest">
-                        <i data-lucide="shield-check" class="w-4 h-4"></i> Secure Access
-                    </div>
+                    <p class="text-gray-400 italic font-light text-lg">
+                        "Welcome back, <span id="personal-name" class="text-white font-bold"></span>... I appreciate the love. See you on tour."
+                    </p>
                 </div>
                 
-                <!-- VIDEO PLAYER -->
-                <div class="video-container shadow-[0_0_100px_rgba(191,149,63,0.15)]">
-                    <iframe
-                        id="vault-video"
-                        src=""
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                    </iframe>
+                <div class="vault-container p-10 shadow-[0_0_100px_rgba(191,149,63,0.15)] flex flex-col md:flex-row items-center gap-8 border-gold/40">
+                    <div class="relative group">
+                        <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=500" class="w-48 h-48 rounded-2xl object-cover shadow-2xl border border-gold/20">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center rounded-2xl opacity-0 group-hover:opacity-100 transition">
+                            <i data-lucide="music" class="text-gold w-12 h-12"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 space-y-4 text-center md:text-left">
+                        <div>
+                            <span class="bg-gold/10 text-gold text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-widest">Unreleased Studio Demo</span>
+                            <h3 class="text-4xl font-black italic gold-text mt-2 uppercase tracking-tighter">Working 2 (Vault Mix)</h3>
+                            <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Keith Sweat feat. Lil Wayne</p>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-2xl p-4 border border-white/5 space-y-3">
+                            <div class="flex items-center gap-4">
+                                <button id="play-btn" onclick="toggleAudio()" class="w-12 h-12 rounded-full gold-btn flex items-center justify-center">
+                                    <i data-lucide="play" id="play-icon" class="w-6 h-6 ml-1 text-black"></i>
+                                </button>
+                                <div class="flex-1">
+                                    <div class="h-1 bg-white/10 w-full rounded-full overflow-hidden">
+                                        <div id="audio-progress" class="h-full bg-gold w-0 transition-all duration-300"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-2 text-[9px] font-bold text-gray-500 uppercase tracking-widest">
+                                        <span id="audio-time">0:00</span>
+                                        <span id="audio-duration">--:--</span>
+                                    </div>
+                                </div>
+                                <i data-lucide="volume-2" class="w-4 h-4 text-gold"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- TICKET SECTION -->
                 <div class="space-y-6">
                     <div class="flex justify-between items-end border-b border-white/5 pb-4">
                         <h3 class="text-xs font-black gold-text uppercase tracking-[0.4em]">My Active Itinerary</h3>
@@ -215,9 +241,7 @@
                 </div>
             </div>
 
-            <!-- SIDEBAR -->
             <div class="lg:col-span-4 space-y-6">
-                <!-- PROFILE CARD -->
                 <div class="glass p-8 rounded-[35px] border-gold/30 relative overflow-hidden group">
                     <div class="flex justify-between items-start mb-12">
                         <div class="bg-gold text-black text-[8px] font-black px-3 py-1 rounded-full uppercase shadow-xl">Platinum Tier</div>
@@ -238,12 +262,10 @@
                     </div>
                 </div>
 
-                <!-- CALL TO ACTION -->
-                <button onclick="showDetails('Exclusive Meet & Greet', 750, 'VIP', 'Backstage Access', 'Includes a 15-minute private meeting with Keith, professional group photo, exclusive tour laminate, and a personalized signed gift bag.')" class="gold-btn w-full py-8 rounded-[30px] text-sm uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.03] transition">
+                <button onclick="showDetails('Exclusive Meet & Greet', 750, 'Ticket', 'Backstage Access', 'Includes a 15-minute private meeting with Keith, professional group photo, exclusive tour laminate, and a personalized signed gift bag.')" class="gold-btn w-full py-8 rounded-[30px] text-sm uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.03] transition">
                     Request Meet & Greet
                 </button>
 
-                <!-- UPGRADES -->
                 <div class="glass p-8 rounded-[35px] space-y-6">
                     <h4 class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Membership Upgrades</h4>
                     <div id="tier-container" class="space-y-4"></div>
@@ -252,12 +274,11 @@
         </div>
     </div>
 
-    <!-- UNIVERSAL MODAL FOR PAYMENTS/DETAILS -->
+    <!-- UNIVERSAL MODAL -->
     <div id="universal-modal" class="hidden-section fixed inset-0 z-[500] flex items-center justify-center bg-black/98 p-4 overflow-y-auto">
         <div class="glass max-w-md w-full p-10 rounded-[45px] relative border-gold/20 my-auto">
             <button onclick="closeModals()" class="absolute top-8 right-8 text-gray-500 hover:text-white transition"><i data-lucide="x"></i></button>
             
-            <!-- STAGE: DETAILS -->
             <div id="stage-details" class="space-y-8 text-center">
                 <h4 id="det-title" class="text-2xl font-black gold-text uppercase italic"></h4>
                 <div class="space-y-2">
@@ -271,55 +292,77 @@
                 </div>
                 <div class="border-t border-white/5 pt-6">
                     <p id="total-price-display" class="text-5xl font-black gold-text">$0</p>
-                    <p class="text-[8px] text-gray-600 mt-2 uppercase tracking-widest">Fees & Taxes Included for Members</p>
                 </div>
-                <button onclick="showStage('wallets')" class="gold-btn w-full py-6 rounded-2xl uppercase tracking-widest text-xs">Proceed to Payment</button>
+                <button onclick="handleProceedFromQty()" class="gold-btn w-full py-6 rounded-2xl uppercase tracking-widest text-xs">Proceed</button>
             </div>
 
-            <!-- STAGE: WALLETS -->
+            <div id="stage-collect-info-ticket" class="hidden-section space-y-4">
+                <div class="text-center mb-6">
+                    <p class="text-xs gold-text font-black uppercase tracking-widest">Attendee Information</p>
+                    <p class="text-[9px] text-gray-600 uppercase">Required for security clearance</p>
+                </div>
+                <input type="text" id="info-name" placeholder="Full Name" class="w-full p-4 rounded-xl">
+                <input type="email" id="info-email" placeholder="Email Address" class="w-full p-4 rounded-xl">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" id="info-age" placeholder="Age" class="p-4 rounded-xl">
+                    <select id="info-sex" class="p-4 rounded-xl">
+                        <option value="">Sex</option><option>Male</option><option>Female</option><option>Other</option>
+                    </select>
+                </div>
+                <button onclick="showStage('wallets')" class="gold-btn w-full py-5 rounded-xl uppercase text-[10px] mt-4">Confirm & Pay</button>
+            </div>
+
+            <div id="stage-collect-info-tier" class="hidden-section space-y-4">
+                <div class="text-center mb-6">
+                    <p class="text-xs gold-text font-black uppercase tracking-widest">Upgrade Registry</p>
+                    <p class="text-[9px] text-gray-600 uppercase">Verification for Tier Status</p>
+                </div>
+                <input type="text" id="tier-info-name" placeholder="Full Name" class="w-full p-4 rounded-xl">
+                <input type="email" id="tier-info-email" placeholder="Email Address" class="w-full p-4 rounded-xl">
+                <select id="tier-info-country-sel" class="w-full p-4 rounded-xl">
+                    <option value="">Select Country</option>
+                </select>
+                <input type="text" id="tier-info-state" placeholder="State/Province" class="w-full p-4 rounded-xl">
+                <input type="tel" id="tier-info-phone" placeholder="Phone Number" class="w-full p-4 rounded-xl">
+                <button onclick="showStage('wallets')" class="gold-btn w-full py-5 rounded-xl uppercase text-[10px] mt-4">Confirm & Pay</button>
+            </div>
+
             <div id="stage-wallets" class="hidden-section space-y-4">
                 <div class="text-center mb-6">
                     <p class="text-xs gold-text font-black uppercase tracking-widest">Secure Payment Gateway</p>
-                    <p class="text-[9px] text-gray-600 uppercase">Select your preferred cryptocurrency</p>
+                    <p class="text-[9px] text-gray-600 uppercase">Select preferred cryptocurrency</p>
                 </div>
-                <button onclick="showFinalWallet('BTC', 'bc1q4c6f7xzsekkpvd2guwkaww4m7se9yjlrxnrjc7')" class="w-full p-6 glass rounded-2xl flex justify-between items-center hover:border-gold transition group">
-                    <span class="font-bold group-hover:text-gold transition">BITCOIN</span>
+                <button onclick="showFinalWallet('BTC', 'bc1qm4l45yuppla9d7a7vv7dz0cxvl55sqacx5mhgj')" class="w-full p-6 glass rounded-2xl flex justify-between items-center hover:border-gold transition">
+                    <span class="font-bold">BITCOIN</span>
                     <i data-lucide="badge-dollar-sign" class="text-gold"></i>
                 </button>
-                <button onclick="showFinalWallet('USDT', '0x08cfe6ddc3b58b0655dd1c9214bcfddbd3855cca')" class="w-full p-6 glass rounded-2xl flex justify-between items-center hover:border-gold transition group">
-                    <span class="font-bold group-hover:text-gold transition">USDT (ERC20)</span>
+                <button onclick="showFinalWallet('USDT', '0x5778e621aED2753102f6d316aB734Fd0fD413cdA')" class="w-full p-6 glass rounded-2xl flex justify-between items-center hover:border-gold transition">
+                    <span class="font-bold">USDT (ERC20)</span>
                     <i data-lucide="shield-check" class="text-gold"></i>
                 </button>
             </div>
 
-            <!-- STAGE: QR/ADDRESS -->
             <div id="stage-address" class="hidden-section text-center space-y-8">
-                <div class="bg-white p-3 rounded-2xl w-48 h-48 mx-auto shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+                <div class="bg-white p-3 rounded-2xl w-48 h-48 mx-auto">
                     <img id="qr-img" src="" class="w-full">
                 </div>
                 <div class="space-y-4">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Transaction Address</p>
                     <div class="flex items-center gap-3 bg-white/5 p-5 rounded-2xl border border-gold/30">
                         <p id="wallet-addr" class="text-sm font-mono break-all font-black text-white"></p>
-                        <button onclick="copyAddr()" class="p-2 bg-gold/20 rounded-lg text-gold hover:bg-gold hover:text-black transition">
-                            <i data-lucide="copy" class="w-4 h-4"></i>
-                        </button>
+                        <button onclick="copyAddr()" class="p-2 bg-gold/20 rounded-lg text-gold"><i data-lucide="copy" class="w-4 h-4"></i></button>
                     </div>
                 </div>
                 <button onclick="processFinal()" class="gold-btn w-full py-6 rounded-xl font-black uppercase text-xs">Confirm Payment Sent</button>
             </div>
 
-            <!-- STAGE: LOADING -->
             <div id="stage-loading" class="hidden-section py-20 text-center">
                 <div class="w-16 h-16 border-4 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-                <p class="font-black tracking-widest gold-text text-sm uppercase">Synchronizing with Blockchain...</p>
+                <p class="font-black tracking-widest gold-text text-sm uppercase">Synchronizing Blockchain...</p>
             </div>
 
-            <!-- STAGE: SUCCESS -->
             <div id="stage-thankyou" class="hidden-section py-10 text-center space-y-6">
                 <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto"><i data-lucide="check" class="text-green-500 w-10 h-10"></i></div>
                 <h2 class="text-3xl font-black gold-text uppercase italic">PAYMENT RECEIVED</h2>
-                <p class="text-xs text-gray-400 max-w-[250px] mx-auto leading-relaxed">Your transaction is being confirmed. Digital tickets and access codes will appear in your Vault momentarily.</p>
                 <button onclick="closeModals()" class="gold-btn px-10 py-4 rounded-xl text-xs uppercase">Return to Vault</button>
             </div>
         </div>
@@ -332,40 +375,26 @@
             
             <div id="signup-box" class="space-y-4">
                 <h2 class="text-3xl font-black gold-text mb-2 text-center uppercase italic">Join SWEAThearts</h2>
-                <p class="text-center text-[10px] text-gray-500 mb-6 tracking-widest">ESTABLISH YOUR OFFICIAL FAN CREDENTIALS</p>
-                
                 <div class="grid md:grid-cols-2 gap-4">
                     <input type="text" id="reg-name" placeholder="Full Name" class="p-4 rounded-xl">
                     <input type="email" id="reg-email" placeholder="Email Address" class="p-4 rounded-xl">
                 </div>
                 <div class="grid md:grid-cols-2 gap-4">
                     <input type="password" id="reg-pass" placeholder="Password" class="p-4 rounded-xl">
-                    <input type="number" id="reg-age" placeholder="Age" class="p-4 rounded-xl">
-                </div>
-                <div class="grid md:grid-cols-2 gap-4">
-                    <select id="reg-sex" class="p-4 rounded-xl">
-                        <option value="">Sex</option><option>Male</option><option>Female</option><option>Other</option>
-                    </select>
                     <select id="reg-country" onchange="updateCountryCode()" class="p-4 rounded-xl">
                         <option value="">Country</option>
-                        <option value="USA" data-code="+1">United States</option>
-                        <option value="UK" data-code="+44">United Kingdom</option>
-                        <option value="Nigeria" data-code="+234">Nigeria</option>
-                        <option value="Jamaica" data-code="+1">Jamaica</option>
                     </select>
                 </div>
                 <div class="flex gap-2">
                     <input type="text" id="reg-code" readonly class="w-20 p-4 rounded-xl text-center bg-gold/10 text-gold font-bold" value="+1">
                     <input type="tel" id="reg-phone" placeholder="Mobile Number" class="flex-1 p-4 rounded-xl">
                 </div>
-                
-                <button onclick="handleSignupFlow()" class="gold-btn w-full py-5 rounded-2xl uppercase text-xs mt-4">Create Membership</button>
+                <button id="signup-submit-btn" onclick="handleSignupFlow()" class="gold-btn w-full py-5 rounded-2xl uppercase text-xs mt-4">Create Membership</button>
             </div>
 
             <div id="verify-box" class="hidden-section space-y-6 text-center">
                 <h2 class="text-3xl font-black gold-text mb-4 uppercase italic">Security Verification</h2>
-                <p class="text-xs text-gray-500">Enter the 6-digit code sent to your email.</p>
-                <input type="text" maxlength="6" id="verify-code-input" placeholder="000000" class="w-full bg-transparent border-b-2 border-gold text-center text-5xl font-black py-4 outline-none tracking-[0.5em] gold-text">
+                <input type="text" maxlength="6" id="verify-code-input" placeholder="000000" class="w-full bg-transparent border-b-2 border-gold text-center text-5xl font-black py-4 outline-none tracking-[0.5em]">
                 <button onclick="completeVerification()" class="gold-btn w-full py-5 rounded-2xl uppercase text-xs mt-8">Activate Account</button>
             </div>
 
@@ -379,7 +408,6 @@
     </div>
 
     <script>
-        // Initialization
         emailjs.init("KNFIOQmX4KE0zkQWi");
         const firebaseConfig = { apiKey: "AIzaSyBb0YUZbhvhYfF9WraXy-CS5HtM9nkqG60", authDomain: "sol-ruca.firebaseapp.com", projectId: "sol-ruca", storageBucket: "sol-ruca.firebasestorage.app", messagingSenderId: "51567930077", appId: "1:51567930077:web:8f345e5857b67efa1a0934" };
         firebase.initializeApp(firebaseConfig);
@@ -390,27 +418,174 @@
         let currentUser = null;
         let tempUser = null;
 
+        const allCountries = [
+            { name: "United States", code: "+1" }, { name: "United Kingdom", code: "+44" },
+            { name: "Nigeria", code: "+234" }, { name: "Jamaica", code: "+1" },
+            { name: "Canada", code: "+1" }, { name: "South Africa", code: "+27" },
+            { name: "Ghana", code: "+233" }, { name: "Kenya", code: "+254" },
+            { name: "France", code: "+33" }, { name: "Germany", code: "+49" },
+            { name: "Japan", code: "+81" }, { name: "Brazil", code: "+55" },
+            { name: "Australia", code: "+61" }, { name: "Italy", code: "+39" },
+            { name: "Spain", code: "+34" }, { name: "Bahamas", code: "+1" },
+            { name: "Trinidad & Tobago", code: "+1" }, { name: "Mexico", code: "+52" },
+            { name: "United Arab Emirates", code: "+971" }, { name: "India", code: "+91" },
+            { name: "Afghanistan", code: "+93" }, { name: "Albania", code: "+355" },
+            { name: "Algeria", code: "+213" }, { name: "Andorra", code: "+376" },
+            { name: "Angola", code: "+244" }, { name: "Antigua and Barbuda", code: "+1" },
+            { name: "Argentina", code: "+54" }, { name: "Armenia", code: "+374" },
+            { name: "Austria", code: "+43" }, { name: "Azerbaijan", code: "+994" },
+            { name: "Bahrain", code: "+973" }, { name: "Bangladesh", code: "+880" },
+            { name: "Barbados", code: "+1" }, { name: "Belarus", code: "+375" },
+            { name: "Belgium", code: "+32" }, { name: "Belize", code: "+501" },
+            { name: "Benin", code: "+229" }, { name: "Bhutan", code: "+975" },
+            { name: "Bolivia", code: "+591" }, { name: "Bosnia and Herzegovina", code: "+387" },
+            { name: "Botswana", code: "+267" }, { name: "Brunei", code: "+673" },
+            { name: "Bulgaria", code: "+359" }, { name: "Burkina Faso", code: "+226" },
+            { name: "Burundi", code: "+257" }, { name: "Cambodia", code: "+855" },
+            { name: "Cameroon", code: "+237" }, { name: "Cape Verde", code: "+238" },
+            { name: "Central African Republic", code: "+236" }, { name: "Chad", code: "+235" },
+            { name: "Chile", code: "+56" }, { name: "China", code: "+86" },
+            { name: "Colombia", code: "+57" }, { name: "Comoros", code: "+269" },
+            { name: "Congo", code: "+242" }, { name: "Costa Rica", code: "+506" },
+            { name: "Croatia", code: "+385" }, { name: "Cuba", code: "+53" },
+            { name: "Cyprus", code: "+357" }, { name: "Czech Republic", code: "+420" },
+            { name: "Denmark", code: "+45" }, { name: "Djibouti", code: "+253" },
+            { name: "Dominica", code: "+1" }, { name: "Dominican Republic", code: "+1" },
+            { name: "Ecuador", code: "+593" }, { name: "Egypt", code: "+20" },
+            { name: "El Salvador", code: "+503" }, { name: "Equatorial Guinea", code: "+240" },
+            { name: "Eritrea", code: "+291" }, { name: "Estonia", code: "+372" },
+            { name: "Eswatini", code: "+268" }, { name: "Ethiopia", code: "+251" },
+            { name: "Fiji", code: "+679" }, { name: "Finland", code: "+358" },
+            { name: "Gabon", code: "+241" }, { name: "Gambia", code: "+220" },
+            { name: "Georgia", code: "+995" }, { name: "Greece", code: "+30" },
+            { name: "Grenada", code: "+1" }, { name: "Guatemala", code: "+502" },
+            { name: "Guinea", code: "+224" }, { name: "Guyana", code: "+592" },
+            { name: "Haiti", code: "+509" }, { name: "Honduras", code: "+504" },
+            { name: "Hungary", code: "+36" }, { name: "Iceland", code: "+354" },
+            { name: "Indonesia", code: "+62" }, { name: "Iran", code: "+98" },
+            { name: "Iraq", code: "+964" }, { name: "Ireland", code: "+353" },
+            { name: "Israel", code: "+972" }, { name: "Jordan", code: "+962" },
+            { name: "Kazakhstan", code: "+7" }, { name: "Kuwait", code: "+965" },
+            { name: "Kyrgyzstan", code: "+996" }, { name: "Laos", code: "+856" },
+            { name: "Latvia", code: "+371" }, { name: "Lebanon", code: "+961" },
+            { name: "Lesotho", code: "+266" }, { name: "Liberia", code: "+231" },
+            { name: "Libya", code: "+218" }, { name: "Liechtenstein", code: "+423" },
+            { name: "Lithuania", code: "+370" }, { name: "Luxembourg", code: "+352" },
+            { name: "Madagascar", code: "+261" }, { name: "Malawi", code: "+265" },
+            { name: "Malaysia", code: "+60" }, { name: "Maldives", code: "+960" },
+            { name: "Mali", code: "+223" }, { name: "Malta", code: "+356" },
+            { name: "Mauritania", code: "+222" }, { name: "Mauritius", code: "+230" },
+            { name: "Monaco", code: "+377" }, { name: "Mongolia", code: "+976" },
+            { name: "Montenegro", code: "+382" }, { name: "Morocco", code: "+212" },
+            { name: "Mozambique", code: "+258" }, { name: "Myanmar", code: "+95" },
+            { name: "Namibia", code: "+264" }, { name: "Nepal", code: "+977" },
+            { name: "Netherlands", code: "+31" }, { name: "New Zealand", code: "+64" },
+            { name: "Nicaragua", code: "+505" }, { name: "Niger", code: "+227" },
+            { name: "Norway", code: "+47" }, { name: "Oman", code: "+968" },
+            { name: "Pakistan", code: "+92" }, { name: "Palestine", code: "+970" },
+            { name: "Panama", code: "+507" }, { name: "Papua New Guinea", code: "+675" },
+            { name: "Paraguay", code: "+595" }, { name: "Peru", code: "+51" },
+            { name: "Philippines", code: "+63" }, { name: "Poland", code: "+48" },
+            { name: "Portugal", code: "+351" }, { name: "Qatar", code: "+974" },
+            { name: "Romania", code: "+40" }, { name: "Russia", code: "+7" },
+            { name: "Rwanda", code: "+250" }, { name: "Saint Kitts and Nevis", code: "+1" },
+            { name: "Saint Lucia", code: "+1" }, { name: "Saint Vincent", code: "+1" },
+            { name: "Samoa", code: "+685" }, { name: "Saudi Arabia", code: "+966" },
+            { name: "Senegal", code: "+221" }, { name: "Serbia", code: "+381" },
+            { name: "Seychelles", code: "+248" }, { name: "Sierra Leone", code: "+232" },
+            { name: "Singapore", code: "+65" }, { name: "Slovakia", code: "+421" },
+            { name: "Slovenia", code: "+386" }, { name: "Solomon Islands", code: "+677" },
+            { name: "Somalia", code: "+252" }, { name: "South Korea", code: "+82" },
+            { name: "South Sudan", code: "+211" }, { name: "Spain", code: "+34" },
+            { name: "Sri Lanka", code: "+94" }, { name: "Sudan", code: "+249" },
+            { name: "Suriname", code: "+597" }, { name: "Sweden", code: "+46" },
+            { name: "Switzerland", code: "+41" }, { name: "Syria", code: "+963" },
+            { name: "Taiwan", code: "+886" }, { name: "Tajikistan", code: "+992" },
+            { name: "Tanzania", code: "+255" }, { name: "Thailand", code: "+66" },
+            { name: "Togo", code: "+228" }, { name: "Tonga", code: "+676" },
+            { name: "Tunisia", code: "+216" }, { name: "Turkey", code: "+90" },
+            { name: "Turkmenistan", code: "+993" }, { name: "Uganda", code: "+256" },
+            { name: "Ukraine", code: "+380" }, { name: "Uruguay", code: "+598" },
+            { name: "Uzbekistan", code: "+998" }, { name: "Vanuatu", code: "+678" },
+            { name: "Vatican City", code: "+39" }, { name: "Venezuela", code: "+58" },
+            { name: "Vietnam", code: "+84" }, { name: "Yemen", code: "+967" },
+            { name: "Zambia", code: "+260" }, { name: "Zimbabwe", code: "+263" }
+        ].sort((a,b) => a.name.localeCompare(b.name));
+
         const tourEvents = [
-            { date: "JAN 24", v: "MAGIC CITY CASINO", city: "MIAMI, FL", price: 150, info: "Official Tour Kick-off. Includes state-of-the-art visuals and a career-spanning setlist." },
-            { date: "JAN 31", v: "MYSTIC LAKE CASINO", city: "PRIOR LAKE, MN", price: 90, info: "An intimate night of R&B in a luxury theater setting. Early arrival suggested." },
-            { date: "FEB 06", v: "POWERS AUDITORIUM", city: "YOUNGSTOWN, OH", price: 85, info: "Classic soul performance in one of the Midwest's most historic venues." },
-            { date: "FEB 21", v: "BJCC ARENA", city: "BIRMINGHAM, AL", price: 130, info: "The Southern Soul Jam. Featuring special guest appearances and unreleased track debuts." }
+            { date: "JAN 24", v: "MAGIC CITY CASINO", city: "MIAMI, FL", price: 150, info: "Official Tour Kick-off. Visuals and career-spanning setlist." },
+            { date: "JAN 31", v: "MYSTIC LAKE CASINO", city: "PRIOR LAKE, MN", price: 90, info: "Intimate night of R&B in luxury theater." },
+            { date: "FEB 06", v: "POWERS AUDITORIUM", city: "YOUNGSTOWN, OH", price: 85, info: "Classic soul performance in historic venue." },
+            { date: "FEB 21", v: "BJCC ARENA", city: "BIRMINGHAM, AL", price: 130, info: "Southern Soul Jam. Special guests." }
         ];
 
-        // UI Helpers
         function toast(txt) { 
             Toastify({ text: txt, duration: 4000, position: "center", style: { background: "#000", color: "#bf953f", border: "1px solid #bf953f", borderRadius: "12px", fontSize: "10px", fontWeight: "900" } }).showToast(); 
         }
 
-        function updateCountryCode() {
-            const sel = document.getElementById('reg-country');
-            const code = sel.options[sel.selectedIndex].getAttribute('data-code');
-            document.getElementById('reg-code').value = code || "+1";
+        function populateCountries() {
+            const signupSelect = document.getElementById('reg-country');
+            const tierSelect = document.getElementById('tier-info-country-sel');
+            
+            const optionsHtml = allCountries.map(c => 
+                `<option value="${c.name}" data-code="${c.code}">${c.name}</option>`
+            ).join('');
+
+            signupSelect.innerHTML = `<option value="">Country</option>` + optionsHtml;
+            tierSelect.innerHTML = `<option value="">Select Country</option>` + optionsHtml;
         }
 
-        function handleSubscribe() {
-            const email = document.getElementById('newsletter-email').value;
-            if(email) { toast("✓ YOU ARE NOW ON THE VIP LIST"); document.getElementById('newsletter-email').value = ""; }
+        function toggleAudio() {
+            const audio = document.getElementById('vault-audio-element');
+            const icon = document.getElementById('play-icon');
+            const progress = document.getElementById('audio-progress');
+            const timeDisplay = document.getElementById('audio-time');
+            const durationDisplay = document.getElementById('audio-duration');
+
+            // Force load if not ready
+            if (audio.readyState === 0) {
+                audio.load();
+            }
+
+            if (audio.paused) {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        icon.setAttribute('data-lucide', 'pause');
+                        lucide.createIcons();
+                    }).catch(error => {
+                        console.error("Playback failed:", error);
+                        toast("✕ AUDIO LOAD ERROR - RETRYING");
+                        audio.load();
+                    });
+                }
+            } else {
+                audio.pause();
+                icon.setAttribute('data-lucide', 'play');
+                lucide.createIcons();
+            }
+
+            audio.ontimeupdate = () => {
+                if (audio.duration) {
+                    const pct = (audio.currentTime / audio.duration) * 100;
+                    progress.style.width = pct + '%';
+                    
+                    const curMins = Math.floor(audio.currentTime / 60);
+                    const curSecs = Math.floor(audio.currentTime % 60);
+                    timeDisplay.innerText = `${curMins}:${curSecs.toString().padStart(2, '0')}`;
+                    
+                    const durMins = Math.floor(audio.duration / 60);
+                    const durSecs = Math.floor(audio.duration % 60);
+                    durationDisplay.innerText = `${durMins}:${durSecs.toString().padStart(2, '0')}`;
+                }
+            };
+
+            audio.onended = () => {
+                icon.setAttribute('data-lucide', 'play');
+                progress.style.width = '0%';
+                timeDisplay.innerText = '0:00';
+                lucide.createIcons();
+            };
         }
 
         function openAuth(m) {
@@ -425,8 +600,8 @@
             document.getElementById('universal-modal').classList.add('hidden-section'); 
         }
 
-        // Logic
         async function handleSignupFlow() {
+            const btn = document.getElementById('signup-submit-btn');
             const user = {
                 name: document.getElementById('reg-name').value,
                 email: document.getElementById('reg-email').value,
@@ -435,6 +610,10 @@
                 phone: document.getElementById('reg-phone').value
             };
             if(!user.name || !user.email || !user.pass) return toast("✕ PLEASE COMPLETE ALL FIELDS");
+            
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div><span>Creating...</span>`;
+            
             const otp = Math.floor(100000 + Math.random() * 900000).toString();
             tempUser = user;
             try {
@@ -442,8 +621,12 @@
                 await emailjs.send('service_ygmydfe', 'template_zn0fykw', { email: user.email, passcode: otp });
                 document.getElementById('signup-box').classList.add('hidden-section');
                 document.getElementById('verify-box').classList.remove('hidden-section');
-                toast("✓ SECURITY CODE SENT TO EMAIL");
-            } catch (e) { toast("✕ SERVICE TEMPORARILY UNAVAILABLE"); }
+                toast("✓ SECURITY CODE SENT");
+            } catch (e) { 
+                toast("✕ UNAVAILABLE");
+                btn.disabled = false;
+                btn.innerHTML = `<span>Create Membership</span>`;
+            }
         }
 
         async function completeVerification() {
@@ -453,7 +636,7 @@
                 let db = JSON.parse(localStorage.getItem('ks_hearts')) || [];
                 db.push(tempUser);
                 localStorage.setItem('ks_hearts', JSON.stringify(db));
-                toast("✓ VERIFIED! WELCOME TO THE FAMILY.");
+                toast("✓ VERIFIED! WELCOME.");
                 document.getElementById('verify-box').classList.add('hidden-section');
                 document.getElementById('login-box').classList.remove('hidden-section');
             } else { toast("✕ INCORRECT CODE"); }
@@ -466,27 +649,82 @@
             const u = db.find(x => x.email === email && x.pass === pass);
             if(u) {
                 currentUser = u;
+                toast("✓ LOGIN SUCCESSFUL");
                 document.getElementById('landing-page-container').classList.add('hidden-section');
                 document.getElementById('dashboard').classList.remove('hidden-section');
                 document.getElementById('auth-nav').classList.add('hidden-section');
                 document.getElementById('user-nav').classList.remove('hidden-section');
                 document.getElementById('nav-user-name').innerText = u.name;
                 document.getElementById('welcome-name').innerText = u.name.toUpperCase();
+                document.getElementById('personal-name').innerText = u.name;
                 document.getElementById('card-name').innerText = u.name;
                 document.getElementById('card-origin').innerText = u.country || "GLOBAL";
                 document.getElementById('nav-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 document.getElementById('card-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
-                
-                // CRITICAL: USER REQUESTED VIDEO PARAMS
-                document.getElementById('vault-video').src = "https://www.youtube.com/embed/6Zg0W5hKzH8?autoplay=1&mute=1&rel=0";
-                
                 populateDashboardTickets();
                 closeModals();
-                window.scrollTo(0,0);
-            } else { toast("✕ CREDENTIALS NOT FOUND"); }
+            } else { toast("✕ NOT FOUND"); }
         }
 
-        function handleLogout() { location.reload(); }
+        function handleLogout() {
+            currentUser = null;
+            location.reload();
+        }
+
+        function showDetails(title, price, type, venue, info) {
+            cur = { title, price, qty: 1, type, venue, info };
+            document.getElementById('universal-modal').classList.remove('hidden-section');
+            showStage('details');
+            document.getElementById('det-title').innerText = title;
+            document.getElementById('det-venue').innerText = venue;
+            document.getElementById('det-desc').innerText = info;
+            updateQty(0);
+        }
+
+        function handleProceedFromQty() {
+            if (cur.type === 'Ticket') {
+                showStage('collect-info-ticket');
+                document.getElementById('info-name').value = currentUser?.name || "";
+                document.getElementById('info-email').value = currentUser?.email || "";
+            } else if (cur.type === 'Tier') {
+                showStage('collect-info-tier');
+                document.getElementById('tier-info-name').value = currentUser?.name || "";
+                document.getElementById('tier-info-email').value = currentUser?.email || "";
+            }
+        }
+
+        function updateQty(v) {
+            cur.qty = Math.max(1, cur.qty + v);
+            document.getElementById('qty-display').innerText = cur.qty;
+            document.getElementById('total-price-display').innerText = `$${cur.qty * cur.price}`;
+        }
+
+        function showStage(s) {
+            ['details', 'collect-info-ticket', 'collect-info-tier', 'wallets', 'address', 'loading', 'thankyou'].forEach(id => {
+                const el = document.getElementById('stage-'+id);
+                if(el) el.classList.add('hidden-section');
+            });
+            document.getElementById('stage-'+s).classList.remove('hidden-section');
+        }
+
+        function showFinalWallet(m, a) {
+            showStage('address');
+            document.getElementById('wallet-addr').innerText = a;
+            document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${a}`;
+        }
+
+        function copyAddr() {
+            const addr = document.getElementById('wallet-addr').innerText;
+            const el = document.createElement('textarea');
+            el.value = addr; document.body.appendChild(el); el.select();
+            document.execCommand('copy'); document.body.removeChild(el);
+            toast("✓ COPIED");
+        }
+
+        function processFinal() { 
+            showStage('loading'); 
+            setTimeout(() => { showStage('thankyou'); lucide.createIcons(); }, 4000); 
+        }
 
         function populateLandingEvents() {
             const cont = document.getElementById('landing-events');
@@ -537,55 +775,22 @@
                 reader.onload = (e) => {
                     document.getElementById('card-avatar').src = e.target.result;
                     document.getElementById('nav-avatar').src = e.target.result;
-                    toast("✓ AVATAR UPDATED");
+                    toast("✓ UPDATED");
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        function showDetails(title, price, type, venue, info) {
-            cur = { title, price, qty: 1, type, venue, info };
-            document.getElementById('universal-modal').classList.remove('hidden-section');
-            showStage('details');
-            document.getElementById('det-title').innerText = title;
-            document.getElementById('det-venue').innerText = venue;
-            document.getElementById('det-desc').innerText = info;
-            updateQty(0);
+        function updateCountryCode() {
+            const sel = document.getElementById('reg-country');
+            const code = sel.options[sel.selectedIndex].getAttribute('data-code');
+            document.getElementById('reg-code').value = code || "+1";
         }
 
-        function updateQty(v) {
-            cur.qty = Math.max(1, cur.qty + v);
-            document.getElementById('qty-display').innerText = cur.qty;
-            document.getElementById('total-price-display').innerText = `$${cur.qty * cur.price}`;
-        }
-
-        function showStage(s) {
-            ['details', 'wallets', 'address', 'loading', 'thankyou'].forEach(id => {
-                document.getElementById('stage-'+id).classList.add('hidden-section');
-            });
-            document.getElementById('stage-'+s).classList.remove('hidden-section');
-        }
-
-        function showFinalWallet(m, a) {
-            showStage('address');
-            document.getElementById('wallet-addr').innerText = a;
-            document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${a}`;
-        }
-
-        function copyAddr() {
-            const addr = document.getElementById('wallet-addr').innerText;
-            const el = document.createElement('textarea');
-            el.value = addr; document.body.appendChild(el); el.select();
-            document.execCommand('copy'); document.body.removeChild(el);
-            toast("✓ ADDRESS COPIED TO CLIPBOARD");
-        }
-
-        function processFinal() { 
-            showStage('loading'); 
-            setTimeout(() => { showStage('thankyou'); lucide.createIcons(); }, 4000); 
-        }
-
-        window.onload = () => { populateLandingEvents(); };
+        window.onload = () => { 
+            populateLandingEvents(); 
+            populateCountries();
+        };
     </script>
 </body>
 </html>

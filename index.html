@@ -142,7 +142,7 @@
             <div class="glass p-10 rounded-[30px] space-y-4">
                 <input type="email" id="contact-email" placeholder="Your Email Address" class="w-full p-5 rounded-2xl outline-none">
                 <textarea id="contact-msg" rows="4" placeholder="How can we help you?" class="w-full p-5 rounded-2xl outline-none resize-none"></textarea>
-                <button onclick="toast('✓ MESSAGE SENT TO MANAGEMENT')" class="gold-btn w-full py-5 rounded-2xl uppercase tracking-[0.2em] font-black">Send Message</button>
+                <button onclick="toast('✓ MESSAGE SENT TO MANAGEMENT')" class="gold-btn gold-btn w-full py-5 rounded-2xl uppercase tracking-[0.2em] font-black">Send Message</button>
             </div>
         </section>
 
@@ -453,8 +453,8 @@
                 document.getElementById('nav-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 document.getElementById('card-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 
-                // NEW: Set iframe source on login
-                document.getElementById('vault-video').src = "https://www.youtube.com/embed/eD-HNycVXK0";
+                // UPDATED: Dynamic Video Link for "The Vault"
+                document.getElementById('vault-video').src = "https://www.youtube.com/embed/CTBErqVN5lg";
                 
                 populateDashboardTickets();
                 closeModals();

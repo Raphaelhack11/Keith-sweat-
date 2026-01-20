@@ -142,7 +142,7 @@
             <div class="glass p-10 rounded-[30px] space-y-4">
                 <input type="email" id="contact-email" placeholder="Your Email Address" class="w-full p-5 rounded-2xl outline-none">
                 <textarea id="contact-msg" rows="4" placeholder="How can we help you?" class="w-full p-5 rounded-2xl outline-none resize-none"></textarea>
-                <button onclick="toast('✓ MESSAGE SENT TO MANAGEMENT')" class="gold-btn gold-btn w-full py-5 rounded-2xl uppercase tracking-[0.2em] font-black">Send Message</button>
+                <button onclick="toast('✓ MESSAGE SENT TO MANAGEMENT')" class="gold-btn w-full py-5 rounded-2xl uppercase tracking-[0.2em] font-black">Send Message</button>
             </div>
         </section>
 
@@ -173,8 +173,9 @@
                     <iframe
                         id="vault-video"
                         frameborder="0"
-                        allow="autoplay; encrypted-media"
-                        allowfullscreen>
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowfullscreen
+                        referrerpolicy="no-referrer">
                     </iframe>
                 </div>
 
@@ -281,7 +282,7 @@
 
     <!-- AUTH/SIGNUP MODAL -->
     <div id="auth-modal" class="hidden-section fixed inset-0 z-[200] flex items-center justify-center bg-black/95 p-4 overflow-y-auto">
-        <div class="glass max-w-lg w-full p-10 rounded-[40px] relative border-gold/20 my-auto">
+        <div class="glass max-lg w-full p-10 rounded-[40px] relative border-gold/20 my-auto">
             <button onclick="closeModals()" class="absolute top-8 right-8 text-gray-500"><i data-lucide="x"></i></button>
             
             <div id="signup-box" class="space-y-4">
@@ -453,8 +454,8 @@
                 document.getElementById('nav-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 document.getElementById('card-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 
-                // UPDATED: Dynamic Video Link for "The Vault"
-                document.getElementById('vault-video').src = "https://www.youtube.com/embed/CTBErqVN5lg";
+                // Using a non-Vevo embeddable high-quality version to bypass playback restrictions
+                document.getElementById('vault-video').src = "https://www.youtube.com/embed/P_P5F-yvR0Q?si=k-wLmOufIS67kn6_";
                 
                 populateDashboardTickets();
                 closeModals();

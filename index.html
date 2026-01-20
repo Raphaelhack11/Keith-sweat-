@@ -173,9 +173,9 @@
                     <iframe
                         id="vault-video"
                         frameborder="0"
-                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowfullscreen
-                        referrerpolicy="no-referrer">
+                        referrerpolicy="strict-origin-when-cross-origin">
                     </iframe>
                 </div>
 
@@ -454,8 +454,11 @@
                 document.getElementById('nav-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 document.getElementById('card-avatar').src = `https://ui-avatars.com/api/?name=${u.name}&background=bf953f&color=000`;
                 
-                // Using a non-Vevo embeddable high-quality version to bypass playback restrictions
-                document.getElementById('vault-video').src = "https://www.youtube.com/embed/P_P5F-yvR0Q?si=k-wLmOufIS67kn6_";
+                // Constructing a robust Vevo-friendly embed URL with specific parameters
+                // Using the specific video ID from your request: FMar1ifzdmk
+                const videoId = "FMar1ifzdmk";
+                const origin = window.location.origin;
+                document.getElementById('vault-video').src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&origin=${encodeURIComponent(origin)}&autoplay=0&rel=0`;
                 
                 populateDashboardTickets();
                 closeModals();
@@ -469,10 +472,7 @@
             document.getElementById('dashboard').classList.add('hidden-section');
             document.getElementById('auth-nav').classList.remove('hidden-section');
             document.getElementById('user-nav').classList.add('hidden-section');
-            
-            // Clear video src on logout
             document.getElementById('vault-video').src = "";
-            
             toast("✓ LOGGED OUT");
         }
 
